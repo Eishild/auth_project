@@ -5,10 +5,13 @@ export const home = (req, res) => {
   res.render("home")
 }
 export const login = (req, res) => {
-  res.render("login")
+  const error_message = req.flash("error")
+
+  res.render("login", { errors: error_message })
 }
 export const register = (req, res) => {
-  res.render("register")
+  const error_message = req.flash("error")
+  res.render("register", { errors: error_message })
 }
 
 export const createUser = async (req, res) => {
@@ -21,6 +24,7 @@ export const createUser = async (req, res) => {
       password.trim() === "" ||
       password_confirm.trim() === ""
     ) {
+      req.flash("error", "Les champs doivent être tous rempli")
       res.redirect(`/register`)
       return
     }
@@ -31,6 +35,10 @@ export const createUser = async (req, res) => {
       lastName.length < 3 ||
       lastName.length >= 20
     ) {
+      req.flash(
+        "error",
+        "first name et last name doivent faire entre 3 et 20 charactères"
+      )
       res.redirect(`/register`)
       return
     }
@@ -41,10 +49,12 @@ export const createUser = async (req, res) => {
       password_confirm.length < 8 ||
       password_confirm.length >= 20
     ) {
+      req.flash("error", "Password doit faire entre 3 et 20 charactères")
       res.redirect(`/register`)
       return
     }
     if (password !== password_confirm) {
+      req.flash("error", "Password ne correspont pas à confim password")
       res.redirect(`/register`)
       return
     }
@@ -64,6 +74,7 @@ export const createUser = async (req, res) => {
 
       res.status(200).redirect("/login")
     } else {
+      req.flash("error", "L'utilisateur existe déjà")
       res.status(400).redirect("/register")
     }
   } catch (error) {
@@ -74,9 +85,15 @@ export const createUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body
 
+  if (email.trim() === "" || password.trim() === "") {
+    req.flash("error", "Les champs doivent être tous rempli")
+    res.redirect(`/login`)
+    return
+  }
+
   try {
     const findUser = await User.findOne({ email: email })
-
+    console.log(findUser)
     if (findUser) {
       const verifyPassword = await argon2.verify(findUser.password, password, {
         hash: process.env.SALT,
@@ -85,9 +102,11 @@ export const loginUser = async (req, res) => {
         req.session.auth = true
         res.status(200).redirect("/posts")
       } else {
+        req.flash("error", "email ou password incorrect")
         res.redirect("/login")
       }
     } else {
+      req.flash("error", "L'utilisateur n'existe pas")
       res.redirect("/login")
     }
   } catch (error) {

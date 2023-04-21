@@ -1,7 +1,7 @@
 extends layouts/frontend
 
 block content
-        .flex.flex-col.justify-center.items-center.bg-gray-800.mt-28.m-auto.rounded-xl(class='w-1/3')
+        .flex.flex-col.justify-center.items-center.bg-gray-800.mt-28.m-auto.rounded-xl.p-4(class='w-1/3')
             h1.text-white.font-bold.text-5xl.my-4 Register
             form(method="POST" action="/register")
                 +field('text', 'firstName', 'First name')
@@ -10,5 +10,7 @@ block content
                 +field('password', 'password', 'Password')
                 +field('password', 'password_confirm', 'Confirm password')
                 button.w-full.my-5.py-2.bg-teal-500.select-none.font-bold.text-white.rounded(type="submit" class='active:bg-teal-600 hover:bg-teal-400') Register
-
-                //- .ui.error.message
+            if  errors
+                each error in errors
+                    .border.border-red-500.rounded-lg.p-2(class='w-2/3 min-h-[50px]')
+                        h1.text-md.text-red-500= error

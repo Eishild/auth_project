@@ -7,6 +7,7 @@ import route from "./routes/routes.js"
 import mongoose from "mongoose"
 import session from "express-session"
 import MongoStore from "connect-mongo"
+import flash from "connect-flash"
 // ==========
 // App initialization
 // ==========
@@ -20,6 +21,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(flash())
 
 app.set("view engine", "pug")
 
