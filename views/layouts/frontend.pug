@@ -1,0 +1,34 @@
+
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="/dist/css/styles.css")
+        script(src="//unpkg.com/jquery@3.1.1/dist/jquery.min.js")
+        block scripts
+
+        title Hello Express Pug App!
+    body
+        .min-h-screen
+            .bg-gray-500.flex.items-center.justify-between.p-2
+                div.flex.gap-4
+                    a.w-20.bg-gray-200.text-center.rounded(href='/' )
+                        | Home
+                    a.w-20.bg-gray-200.text-center.rounded(href='/posts')
+                        | Posts
+                if !auth
+                    .flex.gap-2.justify-end
+                        a.p-2.rounded-lg.bg-sky-500.text-white(href='/login')
+                            | Login
+                        a.p-2.rounded-lg.bg-sky-500.text-white(href='/register')
+                            | register
+                if auth
+                    .flex.gap-2.justify-end
+                        form(action="/logout" method='POST') 
+                            button.p-2.rounded-lg.bg-sky-500.text-white
+                                | Logout
+                
+            include ../mixins/mixin_form.pug
+            block content

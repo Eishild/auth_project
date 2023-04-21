@@ -1,0 +1,12 @@
+extends layouts/frontend
+
+block content
+    .flex.flex-col.justify-center.items-center.bg-gray-800.mt-28.m-auto.rounded-xl(class='w-1/3')
+        h1.text-white.font-bold.text-5xl.my-4 Login
+        form.ui.large.form(method="post", action="/login")
+            +field('email', 'email', 'your.email@address.tld')
+            +field('password', 'password', 'Password')
+            button.w-full.my-5.py-2.bg-teal-500.select-none.font-bold.rounded.text-white(type="submit" class='active:bg-teal-600 hover:bg-teal-400') Login
+
+            //- .ui.error.message
+
